@@ -227,8 +227,13 @@ All CoinGecko calls go through cache                                Never exceed
 
 
 How CRUD works in this app
+-------------------------
 
-OperationCoinGeckoPostgreSQL (Neon)Read market prices✅ GET❌ not storedRead watchlist❌✅ SELECTAdd to watchlist❌✅ INSERTRemove from watchlist❌✅ DELETEAdd portfolio holding❌✅ INSERTUpdate holding❌✅ UPDATEDelete holding❌✅ DELETECreate price alert❌✅ INSERTTrigger alert❌✅ UPDATE
+Operation                            CoinGecko                               PostgreSQL (Neon)
+Read market prices                      ✅ GET                                  ❌ not stored
+Read watchlist                      ❌                                  ✅ SELECT
+Add to watchlist                    ❌                                  ✅ INSERT
+Remove from watchlist               ❌✅ DELETEAdd portfolio holding❌✅ INSERTUpdate holding❌✅ UPDATEDelete holding❌✅ DELETECreate price alert❌✅ INSERTTrigger alert❌✅ UPDATE
 
 CoinGecko = read-only live market data
 Your Neon DB = everything the user owns/creates
@@ -248,3 +253,4 @@ npm run dev
 # Test it's working
 # Open browser: http://localhost:3000/api/health
 # Should return: { "status": "ok" }
+
