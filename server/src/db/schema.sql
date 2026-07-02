@@ -1,15 +1,36 @@
 CREATE TABLE IF NOT EXISTS watchlist (
   id SERIAL PRIMARY KEY,
- coin_id VARCHAR(100) NOT NULL UNIQUE,
- coin_name VARCHAR(100) NOT NULL,
+  coin_id VARCHAR(100) NOT NULL UNIQUE,
+  coin_name VARCHAR(100) NOT NULL,
   coin_symbol VARCHAR(20) NOT NULL,
   coin_image TEXT,
   added_at TIMESTAMP DEFAULT NOW()
-  quantity DECIMAL(20, 8) NOT NULL,
-  buy_price DECIMAL(20, 8) NOT NULL,
+);
+
+CREATE TABLE IF NOT EXISTS portfolio (
+  id SERIAL PRIMARY KEY,
+  coin_id VARCHAR(100) NOT NULL,
+  coin_name VARCHAR(100) NOT NULL,
+  coin_symbol VARCHAR(20) NOT NULL,
+  coin_image TEXT,
+  quantity DECIMAL(20,8) NOT NULL,
+  buy_price DECIMAL(20,8) NOT NULL,
+  buy_date DATE NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW(),
+  updated_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS alerts (
+  id SERIAL PRIMARY KEY,
+  coin_id VARCHAR(100) NOT NULL,
+  coin_name VARCHAR(100) NOT NULL,
+  coin_symbol VARCHAR(20) NOT NULL,
   condition VARCHAR(10) NOT NULL CHECK (condition IN ('above', 'below')),
+  target_price DECIMAL(20,8) NOT NULL,
   status VARCHAR(20) NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'triggered')),
-)
+  created_at TIMESTAMP DEFAULT NOW(),
+  triggered_at TIMESTAMP
+);
 -- IF NOT EXISTS means running this twice won't throw an error 
 -- safe to re-run. This is why migrate.js can be run multiple times without breaking anything.
 --SERIAL = auto-incrementing integer. PostgreSQL automatically assigns 1, 2, 3... to each new row. PRIMARY KEY = unique identifier for each row, never null.

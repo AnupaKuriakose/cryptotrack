@@ -21,6 +21,8 @@ async function migrate() {
     console.log('✅ Tables created: watchlist, portfolio, alerts');
     //Sends the entire SQL string to Neon in one go. PostgreSQL can handle multiple CREATE TABLE statements in one query. The await waits for Neon to confirm all tables were created.
 	} catch (err) {
+      console.error('Migration failed:', err.message);
+    console.error('Full error:', err);  // add this line
     console.error('Migration failed:', err.message);//If anything goes wrong (wrong password, network error, bad SQL), this catches it and shows a readable error. Without this, you'd just see an unhandled promise rejection.
 	} finally {
     await pool.end();

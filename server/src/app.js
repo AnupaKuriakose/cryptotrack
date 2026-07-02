@@ -28,9 +28,9 @@ app.use(express.json());
 // Must come before routes so the body is parsed before controllers try to read it.
 
 app.use('/api/market', marketRoutes);
-app.use('/api/watchlist', watchlistRoutes);
-app.use('/api/portfolio', portfolioRoutes);
-app.use('/api/alerts', alertRoutes);
+// app.use('/api/watchlist', watchlistRoutes);
+// app.use('/api/portfolio', portfolioRoutes);
+// app.use('/api/alerts', alertRoutes);
 // Mounts each route file at its prefix. This means:
 
 // Any request starting with /api/market → handled by market.routes.js
