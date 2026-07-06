@@ -7,6 +7,10 @@ export const {
   selectError,
   selectSearch,
   selectLastUpdated,
+  selectSelectedCoin,
+  selectPriceHistory,
+  selectDetailLoading,
+  selectHistoryLoading,
 } = marketFeature;
 
 export const selectFilteredCoins = createSelector(

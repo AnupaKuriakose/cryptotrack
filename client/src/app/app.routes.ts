@@ -11,4 +11,9 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/market/market.component').then((m) => m.MarketComponent),
   },
+   {
+    path: 'coins/:id',
+    loadComponent: () =>
+      import('./features/coin-detail/coin-detail.component').then((m) => m.CoinDetailComponent),
+  },
 ];

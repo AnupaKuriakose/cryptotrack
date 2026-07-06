@@ -1,143 +1,129 @@
-  <div class="page">
+<div class="page">
 
-      <!-- Header -->
-      <div class="page-header">
+    <!-- Header -->
+    <div class="page-header">
         <div>
-          <h2>Market Overview</h2>
-          <p class="subtitle">Live prices · auto-refreshes every 60s</p>
+            <h2>Market Overview</h2>
+            <p class="subtitle">Live prices · auto-refreshes every 60s</p>
         </div>
         <div class="header-right">
-          @if (lastUpdated()) {
+            @if (lastUpdated()) {
             <span class="updated">
-              <mat-icon class="clock-icon">schedule</mat-icon>
-              {{ lastUpdated() | date:'HH:mm:ss' }}
+                <mat-icon class="clock-icon">schedule</mat-icon>
+                {{ lastUpdated() | date:'HH:mm:ss' }}
             </span>
-          }
-          <button mat-stroked-button (click)="refresh()" class="refresh-btn">
-            <mat-icon>refresh</mat-icon> Refresh
-          </button>
+            }
+            <button mat-stroked-button (click)="refresh()" class="refresh-btn">
+                <mat-icon>refresh</mat-icon> Refresh
+            </button>
         </div>
-      </div>
+    </div>
 
-      <!-- Search -->
-      <mat-form-field appearance="outline" class="search">
+    <!-- Search -->
+    <mat-form-field appearance="outline" class="search">
         <mat-label>Search coins</mat-label>
         <mat-icon matPrefix>search</mat-icon>
-        <input
-          matInput
-          placeholder="Bitcoin, ETH, Solana..."
-          (input)="onSearch($event)"
-        />
-      </mat-form-field>
+        <input matInput placeholder="Bitcoin, ETH, Solana..." (input)="onSearch($event)" />
+    </mat-form-field>
 
-      <!-- Progress bar -->
-      @if (loading()) {
-        <mat-progress-bar mode="indeterminate" class="progress" />
-      }
+    <!-- Progress bar -->
+    @if (loading()) {
+    <mat-progress-bar mode="indeterminate" class="progress" />
+    }
 
-      <!-- Error -->
-      @if (error()) {
-        <div class="error-banner">
-          <mat-icon>warning</mat-icon>
-          {{ error() }}
-        </div>
-      }
+    <!-- Error -->
+    @if (error()) {
+    <div class="error-banner">
+        <mat-icon>warning</mat-icon>
+        {{ error() }}
+    </div>
+    }
 
-      <!-- Coin count -->
-      @if (coins().length) {
-        <p class="coin-count">Showing {{ coins().length }} coins</p>
-      }
+    <!-- Coin count -->
+    @if (coins().length) {
+    <p class="coin-count">Showing {{ coins().length }} coins</p>
+    }
 
-      <!-- Table -->
-      <div class="table-card">
-        <table mat-table [dataSource]="coins()" class="coin-table">
+    <!-- Table -->
+    <div class="table-card">
+        <table mat-table [dataSource]="sortedCoins()" class="coin-table" matSort (matSortChange)="onSort($event)">
 
-          <!-- Rank -->
-          <ng-container matColumnDef="rank">
-            <th mat-header-cell *matHeaderCellDef class="col-rank">#</th>
-            <td mat-cell *matCellDef="let coin" class="col-rank rank-cell">
-              {{ coin.market_cap_rank }}
-            </td>
-          </ng-container>
+            <!-- Watchlist star -->
+            <ng-container matColumnDef="watchlist">
+                <th mat-header-cell *matHeaderCellDef style="width:48px"></th>
+                <td mat-cell *matCellDef="let coin">
+                    <button mat-icon-button class="star-btn" (click)="$event.stopPropagation()">
+                        <mat-icon style="color:#ccc;font-size:18px">star_border</mat-icon>
+                    </button>
+                </td>
+            </ng-container>
 
-          <!-- Coin -->
-          <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef>Coin</th>
-            <td mat-cell *matCellDef="let coin">
-              <div class="coin-cell">
-                <img
-                  [src]="coin.image"
-                  [alt]="coin.name"
-                  width="28"
-                  height="28"
-                  class="coin-img"
-                />
-                <div>
-                  <div class="coin-name">{{ coin.name }}</div>
-                  <div class="coin-sym">{{ coin.symbol | uppercase }}</div>
-                </div>
-              </div>
-            </td>
-          </ng-container>
+            <!-- Coin name -->
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef>Coin</th>
+                <td mat-cell *matCellDef="let coin">
+                    <div class="coin-cell">
+                        <img [src]="coin.image" [alt]="coin.name" width="28" height="28" class="coin-img" />
+                        <div>
+                            <div class="coin-name">{{ coin.name }}</div>
+                            <div class="coin-sym">{{ coin.symbol | uppercase }}</div>
+                        </div>
+                    </div>
+                </td>
+            </ng-container>
 
-          <!-- Price -->
-          <ng-container matColumnDef="price">
-            <th mat-header-cell *matHeaderCellDef class="text-right">Price</th>
-            <td mat-cell *matCellDef="let coin" class="text-right mono price-cell">
-              {{ coin.current_price | currency:'USD':'symbol':'1.2-6' }}
-            </td>
-          </ng-container>
+            <!-- Price — sortable -->
+            <ng-container matColumnDef="price">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header="current_price" class="text-right">Price</th>
+                <td mat-cell *matCellDef="let coin" class="text-right mono price-cell">
+                    {{ coin.current_price | currency:'USD':'symbol':'1.2-6' }}
+                </td>
+            </ng-container>
 
-          <!-- 24h change -->
-          <ng-container matColumnDef="change24h">
-            <th mat-header-cell *matHeaderCellDef class="text-right">24h %</th>
-            <td mat-cell *matCellDef="let coin" class="text-right">
-              <span
-                class="change-pill"
-                [class.up]="coin.price_change_percentage_24h > 0"
-                [class.down]="coin.price_change_percentage_24h < 0"
-                [class.neutral]="coin.price_change_percentage_24h === 0"
-              >
-                <mat-icon class="arrow-icon">
-                  {{ coin.price_change_percentage_24h > 0 ? 'arrow_drop_up' : 'arrow_drop_down' }}
-                </mat-icon>
-                {{ coin.price_change_percentage_24h | number:'1.2-2' }}%
-              </span>
-            </td>
-          </ng-container>
+            <!-- 24h % — sortable -->
+            <ng-container matColumnDef="change24h">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header="price_change_percentage_24h" class="text-right">
+                    24h %</th>
+                <td mat-cell *matCellDef="let coin" class="text-right">
+                    <span class="change-pill" [class.up]="coin.price_change_percentage_24h > 0"
+                        [class.down]="coin.price_change_percentage_24h < 0">
+                        <mat-icon class="arrow-icon">
+                            {{ coin.price_change_percentage_24h > 0 ? 'arrow_drop_up' : 'arrow_drop_down' }}
+                        </mat-icon>
+                        {{ coin.price_change_percentage_24h | number:'1.2-2' }}%
+                    </span>
+                </td>
+            </ng-container>
 
-          <!-- Market Cap -->
-          <ng-container matColumnDef="marketCap">
-            <th mat-header-cell *matHeaderCellDef class="text-right">Market Cap</th>
-            <td mat-cell *matCellDef="let coin" class="text-right mono muted">
-              {{ formatLargeNumber(coin.market_cap) }}
-            </td>
-          </ng-container>
+            <!-- Market Cap — sortable -->
+            <ng-container matColumnDef="marketCap">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header="market_cap" class="text-right">Market Cap</th>
+                <td mat-cell *matCellDef="let coin" class="text-right mono muted">
+                    {{ formatLargeNumber(coin.market_cap) }}
+                </td>
+            </ng-container>
 
-          <!-- Volume -->
-          <ng-container matColumnDef="volume">
-            <th mat-header-cell *matHeaderCellDef class="text-right">Volume 24h</th>
-            <td mat-cell *matCellDef="let coin" class="text-right mono muted">
-              {{ formatLargeNumber(coin.total_volume) }}
-            </td>
-          </ng-container>
+            <!-- Volume — sortable -->
+            <ng-container matColumnDef="volume">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header="total_volume" class="text-right">Volume 24h</th>
+                <td mat-cell *matCellDef="let coin" class="text-right mono muted">
+                    {{ formatLargeNumber(coin.total_volume) }}
+                </td>
+            </ng-container>
 
-          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-          <tr
-            mat-row
-            *matRowDef="let row; columns: displayedColumns;"
-            class="coin-row"
-          ></tr>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="coin-row" (click)="goToDetail(row)">
+            </tr>
 
         </table>
 
         <!-- Empty state -->
         @if (!loading() && coins().length === 0) {
-          <div class="empty-state">
+        <div class="empty-state">
             <mat-icon>search_off</mat-icon>
             <p>No coins found</p>
-          </div>
+        </div>
         }
-      </div>
-
     </div>
+
+</div>

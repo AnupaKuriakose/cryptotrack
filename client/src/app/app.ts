@@ -40,9 +40,7 @@ import { DOCUMENT } from '@angular/common';
 
     <mat-sidenav-container class="sidenav-container">
       <mat-sidenav mode="side" opened class="sidenav">
-        <div class="sidenav-header">
-          <span class="sidenav-title">Menu</span>
-        </div>
+      
         <mat-nav-list>
           
             <mat-list-item
