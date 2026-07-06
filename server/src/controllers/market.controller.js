@@ -22,12 +22,11 @@ exports.getCoinDetail = async (req, res, next) => {
 };
 
 exports.getPriceHistory = async(req, res, next) => {
-  try{
-
-  }
-  catch(error)
-  {
-
+ try {
+    const data = await coingeckoService.getPriceHistory(req.params.id);
+    res.json(data);
+  } catch (error) {
+    next(error);
   }
 }
 

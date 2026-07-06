@@ -1,15 +1,15 @@
 import {
-  Component,
-  OnInit,
-  OnDestroy,
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  inject,
-  signal,
-  computed,
-  effect,
-  ViewChild,
-  ElementRef,
+    Component,
+    OnInit,
+    OnDestroy,
+    AfterViewInit,
+    ChangeDetectionStrategy,
+    inject,
+    signal,
+    computed,
+    effect,
+    ViewChild,
+    ElementRef,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -21,47 +21,47 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import {
-  Chart,
-  LineController,
-  LineElement,
-  PointElement,
-  LinearScale,
-  Filler,
-  Tooltip,
-  CategoryScale,
+    Chart,
+    LineController,
+    LineElement,
+    PointElement,
+    LinearScale,
+    Filler,
+    Tooltip,
+    CategoryScale,
 } from 'chart.js';
 import { MarketFacade } from '../../store/market/market.facade';
 
 // Register Chart.js components
 Chart.register(
-  LineController,
-  LineElement,
-  PointElement,
-  LinearScale,
-  Filler,
-  Tooltip,
-  CategoryScale
+    LineController,
+    LineElement,
+    PointElement,
+    LinearScale,
+    Filler,
+    Tooltip,
+    CategoryScale
 );
 
 @Component({
-  selector: 'app-coin-detail',
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    CommonModule,
-    CurrencyPipe,
-    DatePipe,
-    DecimalPipe,
-    UpperCasePipe,
-    MatButtonModule,
-    MatIconModule,
-    MatButtonToggleModule,
-    MatProgressSpinnerModule,
-    MatChipsModule,
-    MatTooltipModule,
-    // ← no BaseChartDirective needed
-  ],
-  template: `
+    selector: 'app-coin-detail',
+    standalone: true,
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        CommonModule,
+        CurrencyPipe,
+        DatePipe,
+        DecimalPipe,
+        UpperCasePipe,
+        MatButtonModule,
+        MatIconModule,
+        MatButtonToggleModule,
+        MatProgressSpinnerModule,
+        MatChipsModule,
+        MatTooltipModule,
+        // ← no BaseChartDirective needed
+    ],
+    template: `
     <div class="page">
 
       <!-- Back button -->
@@ -111,32 +111,30 @@ Chart.register(
           </div>
         </div>
 
-        <!-- Chart section -->
-        <div class="chart-card">
-          <div class="chart-header">
-            <span class="chart-title">Price Chart</span>
-            <mat-button-toggle-group
-              [value]="selectedDays()"
-              (change)="onDaysChange($event.value)"
-              class="days-toggle"
-            >
-              <mat-button-toggle [value]="1">1D</mat-button-toggle>
-              <mat-button-toggle [value]="7">7D</mat-button-toggle>
-              <mat-button-toggle [value]="30">30D</mat-button-toggle>
-              <mat-button-toggle [value]="90">90D</mat-button-toggle>
-            </mat-button-toggle-group>
-          </div>
+    <div class="chart-card">
+  <div class="chart-header">
+    <span class="chart-title">Price Chart</span>
+    <mat-button-toggle-group
+      [value]="selectedDays()"
+      (change)="onDaysChange($event.value)"
+    >
+      <mat-button-toggle [value]="1">1D</mat-button-toggle>
+      <mat-button-toggle [value]="7">7D</mat-button-toggle>
+      <mat-button-toggle [value]="30">30D</mat-button-toggle>
+      <mat-button-toggle [value]="90">90D</mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
 
-          @if (historyLoading()) {
-            <div class="chart-loading">
-              <mat-spinner diameter="32" />
-            </div>
-          } @else {
-            <div class="chart-wrap">
-              <canvas #priceChart></canvas>
-            </div>
-          }
-        </div>
+  <div class="chart-wrap">
+    <!-- Spinner overlays canvas — canvas stays in DOM always -->
+    @if (historyLoading()) {
+      <div class="chart-overlay">
+        <mat-spinner diameter="32" />
+      </div>
+    }
+    <canvas #priceChart></canvas>
+  </div>
+</div>
 
         <!-- Stats grid — unchanged -->
         <div class="stats-grid">
@@ -185,7 +183,7 @@ Chart.register(
 
     </div>
   `,
-  styles: [`
+    styles: [`
     .page { max-width: 1100px; }
     .back-btn { margin-bottom: 20px; color: #666; }
     .spinner-wrap { display: flex; justify-content: center; padding: 80px; }
@@ -227,7 +225,20 @@ Chart.register(
       justify-content: space-between; margin-bottom: 16px;
     }
     .chart-title { font-size: 14px; font-weight: 600; color: #333; }
-    .chart-wrap { height: 280px; position: relative; }
+   .chart-wrap {
+  height: 280px;
+  position: relative;  /* ← needed for overlay positioning */
+}
+.chart-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.7);
+  z-index: 1;
+  border-radius: 6px;
+}
     .chart-loading { height: 280px; display: flex; align-items: center; justify-content: center; }
     .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
     .stat-card {
@@ -247,131 +258,132 @@ Chart.register(
     }
   `],
 })
-export class CoinDetailComponent implements OnInit, OnDestroy {
-  private route = inject(ActivatedRoute);
-  private router = inject(Router);
-  private facade = inject(MarketFacade);
+export class CoinDetailComponent implements OnInit, AfterViewInit, OnDestroy {
+    private route = inject(ActivatedRoute);
+    private router = inject(Router);
+    private facade = inject(MarketFacade);
 
-  // Canvas ref — Chart.js attaches here
-  @ViewChild('priceChart') chartCanvas!: ElementRef<HTMLCanvasElement>;
+    // Canvas ref — Chart.js attaches here
+    @ViewChild('priceChart') chartCanvas!: ElementRef<HTMLCanvasElement>;
 
-  coin = toSignal(this.facade.selectedCoin$, { initialValue: null });
-  priceHistory = toSignal(this.facade.priceHistory$, { initialValue: [] });
-  detailLoading = toSignal(this.facade.detailLoading$, { initialValue: false });
-  historyLoading = toSignal(this.facade.historyLoading$, { initialValue: false });
+    coin = toSignal(this.facade.selectedCoin$, { initialValue: null });
+    priceHistory = toSignal(this.facade.priceHistory$, { initialValue: [] });
+    detailLoading = toSignal(this.facade.detailLoading$, { initialValue: false });
+    historyLoading = toSignal(this.facade.historyLoading$, { initialValue: false });
+    private chartReady = signal(false); // ← new signal
 
-  selectedDays = signal(7);
+    selectedDays = signal(7);
 
-  private chart: Chart | null = null;
+    private chart: Chart | null = null;
 
-  // Effect — watches priceHistory signal
-  // When data arrives OR days changes → rebuild chart
-  private chartEffect = effect(() => {
-    const history = this.priceHistory();
-
-    // Don't render if no data or canvas not ready
-    if (!history.length || !this.chartCanvas?.nativeElement) return;
-
-    const labels = history.map((p) =>
-      new Date(p.timestamp).toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-      })
-    );
-    const prices = history.map((p) => p.price);
-
-    if (this.chart) {
-      // Chart already exists — just update data
-      // Much faster than destroying and recreating
-      this.chart.data.labels = labels;
-      this.chart.data.datasets[0].data = prices;
-      this.chart.update('active');
-    } else {
-      // First render — create the chart
-      this.chart = new Chart(this.chartCanvas.nativeElement, {
-        type: 'line',
-        data: {
-          labels,
-          datasets: [
-            {
-              data: prices,
-              borderColor: '#3F51B5',
-              backgroundColor: 'rgba(63,81,181,0.08)',
-              fill: true,
-              tension: 0.4,
-              pointRadius: 0,
-              pointHoverRadius: 4,
-              borderWidth: 2,
-            },
-          ],
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          interaction: { intersect: false, mode: 'index' },
-          plugins: {
-            legend: { display: false },
-            tooltip: {
-              callbacks: {
-                label: (ctx) => ` $${ctx.parsed.y?.toLocaleString()}`,
-              },
-            },
-          },
-          scales: {
-            x: {
-              grid: { display: false },
-              ticks: { maxTicksLimit: 8, font: { size: 11 } },
-            },
-            y: {
-              position: 'right',
-              grid: { color: '#f0f0f0' },
-              ticks: {
-                font: { size: 11 },
-                callback: (val) => `$${Number(val).toLocaleString()}`,
-              },
-            },
-          },
-        },
-      });
+    ngAfterViewInit() {
+        // Canvas is now in DOM — signal the effect it can render
+        this.chartReady.set(true);
     }
-  });
 
-  // Effect — reload history when days signal changes
-  private daysEffect = effect(() => {
-    const days = this.selectedDays();
-    const coinId = this.route.snapshot.paramMap.get('id');
-    if (coinId) {
-      this.facade.loadPriceHistory(coinId, days);
+    // Effect — watches both priceHistory AND chartReady
+    private chartEffect = effect(() => {
+        const history = this.priceHistory();
+        const ready = this.chartReady(); // ← tracks canvas readiness
+
+        // Wait until canvas is ready AND data has arrived
+        if (!ready || !history.length || !this.chartCanvas?.nativeElement) return;
+
+        const labels = history.map((p) =>
+            new Date(p.timestamp).toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+            })
+        );
+        const prices = history.map((p) => p.price);
+
+        if (this.chart) {
+            this.chart.data.labels = labels;
+            this.chart.data.datasets[0].data = prices;
+            this.chart.update('active');
+        } else {
+            this.chart = new Chart(this.chartCanvas.nativeElement, {
+                type: 'line',
+                data: {
+                    labels,
+                    datasets: [{
+                        data: prices,
+                        borderColor: '#3F51B5',
+                        backgroundColor: 'rgba(63,81,181,0.08)',
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 0,
+                        pointHoverRadius: 4,
+                        borderWidth: 2,
+                    }],
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: { intersect: false, mode: 'index' },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => ` $${ctx?.parsed?.y?.toLocaleString()}`,
+                            },
+                        },
+                    },
+                    scales: {
+                        x: {
+                            grid: { display: false },
+                            ticks: { maxTicksLimit: 8, font: { size: 11 } },
+                        },
+                        y: {
+                            position: 'right',
+                            grid: { color: '#f0f0f0' },
+                            ticks: {
+                                font: { size: 11 },
+                                callback: (val) => `$${Number(val).toLocaleString()}`,
+                            },
+                        },
+                    },
+                },
+            });
+        }
+    });
+
+    // Effect — reload history when days signal changes
+    private daysEffect = effect(() => {
+        const days = this.selectedDays();
+        const coinId = this.route.snapshot.paramMap.get('id');
+        if (coinId) {
+            this.facade.loadPriceHistory(coinId, days);
+        }
+    });
+
+    ngOnInit() {
+        const coinId = this.route.snapshot.paramMap.get('id');
+        if (coinId) {
+            this.facade.loadCoinDetail(coinId);
+            this.facade.loadPriceHistory(coinId, this.selectedDays());
+        }
     }
-  });
 
-  ngOnInit() {
-    const coinId = this.route.snapshot.paramMap.get('id');
-    if (coinId) {
-      this.facade.loadCoinDetail(coinId);
-      this.facade.loadPriceHistory(coinId, this.selectedDays());
+    ngOnDestroy() {
+        // Always destroy Chart.js instance to prevent memory leaks
+        this.chart?.destroy();
+        this.chart = null;
     }
-  }
 
-  ngOnDestroy() {
-    // Always destroy Chart.js instance to prevent memory leaks
-    this.chart?.destroy();
-    this.chart = null;
-  }
+    onDaysChange(days: number) {
+        this.selectedDays.set(days);
+    }
 
-  onDaysChange(days: number) {
-    this.selectedDays.set(days);
-  }
+    goBack() {
+        this.router.navigate(['/market']);
+    }
 
-  goBack() {
-    this.router.navigate(['/market']);
-  }
-
-  formatLarge(value: number): string {
-    if (!value) return '-';
-    if (value >= 1_000_000_000_000) return `$${(value / 1_000_000_000_000).toFixed(2)}T`;
-    if (value >= 1_000_000_000) return `$${(value / 1_000_000_000).toFixed(2)}B`;
-    if (value >= 1_000_000) return `$${(value / 1_000_000).toFixed(2)}M`;
-    return `$${value.toLocaleString()}`;
-  }
+    formatLarge(value: number): string {
+        if (!value) return '-';
+        if (value >= 1_000_000_000_000) return `$${(value / 1_000_000_000_000).toFixed(2)}T`;
+        if (value >= 1_000_000_000) return `$${(value / 1_000_000_000).toFixed(2)}B`;
+        if (value >= 1_000_000) return `$${(value / 1_000_000).toFixed(2)}M`;
+        return `$${value.toLocaleString()}`;
+    }
 }
