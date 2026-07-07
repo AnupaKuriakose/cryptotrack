@@ -21,6 +21,7 @@ import { MarketFacade } from '../../store/market/market.facade';
 import { Coin } from '../../models/coin.model';
 import { MatSortModule, Sort } from '@angular/material/sort';
 import { Router } from '@angular/router';
+import { WatchlistFacade } from '../../store/watchlist/watchlist.facade';
 
 
 @Component({
@@ -48,6 +49,9 @@ import { Router } from '@angular/router';
 export class MarketComponent implements OnInit, OnDestroy {
     private facade = inject(MarketFacade);
     private router = inject(Router);
+    private watchlistFacade = inject(WatchlistFacade);
+    watchlistIds = toSignal(this.watchlistFacade.watchlistIds$, { initialValue: new Set<string>() });
+
 
     coins = toSignal(this.facade.coins$, { initialValue: [] as Coin[] });
     loading = toSignal(this.facade.loading$, { initialValue: false });
@@ -75,6 +79,7 @@ export class MarketComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.facade.loadCoins();
+        this.watchlistFacade.loadWatchlist(); // ← add this
         this.pollInterval = setInterval(() => this.facade.loadCoins(), 60000);
     }
 
@@ -109,6 +114,20 @@ export class MarketComponent implements OnInit, OnDestroy {
         this.sortDir.set(sort.direction as 'asc' | 'desc');
     }
     goToDetail(coin: Coin) {
-  this.router.navigate(['/coins', coin.id]);
+        this.router.navigate(['/coins', coin.id]);
+    }
+
+    toggleWatchlist(event: Event, coin: Coin) {
+  event.stopPropagation(); // prevent row click
+  if (this.watchlistIds().has(coin.id)) {
+    this.watchlistFacade.removeCoin(coin.id);
+  } else {
+    this.watchlistFacade.addCoin({
+      coin_id: coin.id,
+      coin_name: coin.name,
+      coin_symbol: coin.symbol,
+      coin_image: coin.image,
+    });
+  }
 }
 }

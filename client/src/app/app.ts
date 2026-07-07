@@ -49,7 +49,16 @@ import { DOCUMENT } from '@angular/common';
           > 
             <mat-icon matListItemIcon>bar_chart</mat-icon>
             <span matListItemTitle>Market</span></mat-list-item>
+
+            <a mat-list-item routerLink="/watchlist" routerLinkActive="active-link">
+    <mat-icon matListItemIcon>star</mat-icon>
+    <span matListItemTitle>Watchlist</span>
+  </a>
         </mat-nav-list>
+
+   
+  
+
       </mat-sidenav>
 
       <mat-sidenav-content class="content">

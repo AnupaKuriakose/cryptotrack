@@ -16,4 +16,9 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/coin-detail/coin-detail.component').then((m) => m.CoinDetailComponent),
   },
+   {
+    path: 'watchlist',
+    loadComponent: () =>
+      import('./features/watchlist/watchlist.component').then((m) => m.WatchlistComponent),
+  },
 ];

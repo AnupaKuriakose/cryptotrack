@@ -1,0 +1,193 @@
+ .page {
+     max-width: 1100px;
+ }
+
+ .back-btn {
+     margin-bottom: 20px;
+     color: #666;
+ }
+
+ .spinner-wrap {
+     display: flex;
+     justify-content: center;
+     padding: 80px;
+ }
+
+ .coin-header {
+     display: flex;
+     align-items: flex-start;
+     justify-content: space-between;
+     flex-wrap: wrap;
+     gap: 16px;
+     margin-bottom: 24px;
+ }
+
+ .coin-identity {
+     display: flex;
+     align-items: center;
+     gap: 16px;
+ }
+
+ .coin-logo {
+     border-radius: 50%;
+ }
+
+ .coin-title {
+     font-size: 22px;
+     font-weight: 600;
+     display: flex;
+     align-items: center;
+     gap: 8px;
+     margin-bottom: 6px;
+ }
+
+ .coin-symbol {
+     color: #888;
+     font-size: 14px;
+     font-weight: 400;
+ }
+
+ .rank-badge {
+     background: #f0f0f0;
+     color: #666;
+     font-size: 11px;
+     padding: 2px 8px;
+     border-radius: 10px;
+     font-weight: 500;
+ }
+
+ .coin-price {
+     font-size: 28px;
+     font-weight: 700;
+     font-family: 'Roboto Mono', monospace;
+     display: flex;
+     align-items: center;
+     gap: 10px;
+ }
+
+ .coin-actions {
+     display: flex;
+     gap: 10px;
+     align-items: center;
+ }
+
+ .change-pill {
+     font-size: 14px;
+     padding: 3px 10px;
+     border-radius: 20px;
+     font-weight: 500;
+ }
+
+ .up {
+     color: #16C784;
+ }
+
+ .down {
+     color: #EA3943;
+ }
+
+ .change-pill.up {
+     background: rgba(22, 199, 132, 0.12);
+     color: #16C784;
+ }
+
+ .change-pill.down {
+     background: rgba(234, 57, 67, 0.10);
+     color: #EA3943;
+ }
+
+ .chart-card {
+     background: #fff;
+     border: 1px solid #e0e0e0;
+     border-radius: 10px;
+     padding: 20px;
+     margin-bottom: 20px;
+     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+ }
+
+ .chart-header {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     margin-bottom: 16px;
+ }
+
+ .chart-title {
+     font-size: 14px;
+     font-weight: 600;
+     color: #333;
+ }
+
+ .chart-wrap {
+     height: 280px;
+     position: relative;
+     /* ← needed for overlay positioning */
+ }
+
+ .chart-overlay {
+     position: absolute;
+     inset: 0;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     background: rgba(255, 255, 255, 0.7);
+     z-index: 1;
+     border-radius: 6px;
+ }
+
+ .chart-loading {
+     height: 280px;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+ }
+
+ .stats-grid {
+     display: grid;
+     grid-template-columns: repeat(4, 1fr);
+     gap: 12px;
+ }
+
+ .stat-card {
+     background: #fff;
+     border: 1px solid #e0e0e0;
+     border-radius: 8px;
+     padding: 14px 16px;
+     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+ }
+
+ .stat-label {
+     font-size: 11px;
+     color: #999;
+     text-transform: uppercase;
+     letter-spacing: 0.05em;
+     margin-bottom: 6px;
+ }
+
+ .stat-value {
+     font-size: 15px;
+     font-weight: 600;
+     font-family: 'Roboto Mono', monospace;
+     color: #222;
+ }
+
+ .stat-sub {
+     font-size: 11px;
+     color: #aaa;
+     margin-top: 3px;
+ }
+
+ @media (max-width: 768px) {
+     .stats-grid {
+         grid-template-columns: repeat(2, 1fr);
+     }
+
+     .coin-header {
+         flex-direction: column;
+     }
+ }
+
+ .snack-success .mdc-snackbar__surface {
+  background: #1B5E20 !important;
+  color: #fff !important;
+}

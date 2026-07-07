@@ -95,28 +95,39 @@
 }
 
 /* Column widths */
-.col-rank {
+.coin-table {
+    width: 100%;
+    table-layout: fixed;
+}
+
+.col-watchlist {
     width: 56px;
+    text-align: center !important;
 }
 
 .col-name {
-    width: 200px;
+    width: 240px;
+    text-align: left !important;
 }
 
 .col-price {
-    width: 150px;
+    width: 140px;
+    text-align: right !important;
 }
 
 .col-change {
     width: 120px;
+    text-align: right !important;
 }
 
 .col-market-cap {
     width: 150px;
+    text-align: right !important;
 }
 
 .col-volume {
     width: 150px;
+    text-align: right !important;
 }
 
 .text-right {
@@ -221,12 +232,25 @@ th.mat-header-cell {
 
 td.mat-cell {
     border-bottom-color: #f0f0f0;
-    padding: 10px 16px;
+    padding: 12px 16px;
+    vertical-align: middle;
 }
 
 th.mat-header-cell {
-    padding: 10px 16px;
+    padding: 12px 16px;
     border-bottom: 1px solid #e8e8e8;
+    vertical-align: middle;
+}
+
+th.mat-header-cell .mat-sort-header-container {
+    width: 100%;
+}
+
+th.mat-header-cell.col-price .mat-sort-header-container,
+th.mat-header-cell.col-change .mat-sort-header-container,
+th.mat-header-cell.col-market-cap .mat-sort-header-container,
+th.mat-header-cell.col-volume .mat-sort-header-container {
+    justify-content: flex-end;
 }
 
 /* Empty state */

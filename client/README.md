@@ -87,6 +87,8 @@ Express: GET / POST / DELETE /api/watchlist routes
 NgRx watchlist store — actions, effects, facade
 Watchlist page — table with live prices enriched from market store
 Remove with MatSnackBar UNDO (5s window)
+Express API (GET/POST/DELETE) → NgRx watchlist store → Watchlist page
++ Wire the ⭐ star button on market table and coin detail page
 
 Sprint 4 — Portfolio CRUD + P&L
 ------------

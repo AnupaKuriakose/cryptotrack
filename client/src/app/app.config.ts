@@ -7,13 +7,15 @@ import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { routes } from './app.routes';
 import { marketReducer } from './store/market/market.reducer';
 import { MarketEffects } from './store/market/market.effects';
+import { watchlistReducer } from './store/watchlist/watchlist.reducer';
+import { WatchlistEffects } from './store/watchlist/watchlist.effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
     provideHttpClient(),
-    provideStore({ market: marketReducer }),
-    provideEffects([MarketEffects]),
+    provideStore({ market: marketReducer, watchlist: watchlistReducer }),
+    provideEffects([MarketEffects, WatchlistEffects]),
     provideStoreDevtools({ maxAge: 25 }),
   ],
 };
