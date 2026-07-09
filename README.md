@@ -368,7 +368,38 @@ CREATE TABLE alerts (
 | `ng build` | client/ | Production build to dist/ |
 
 ---
+💡 Project Goal
+This project demonstrates:
+
+Full-stack development (React + Node.js)
+API integration
+CRUD operations
+AI integration in real-world applications
+📌 Status
+🚧 Live Demo - coming soon
+
+📸 Screenshots
 
 ## License
+
+Home page - Market overview - light mode
+![alt text](image-1.png)
+
+Home page - dark mode
+![alt text](image-2.png)
+
+
+Market  detail - clickk on each row
+![alt text](image-3.png)
+
+Starred Coins in watchlist
+![alt text](image-4.png)
+
+Add holding
+![alt text](image-5.png)
+
+![alt text](image-6.png)
+
+![alt text](image-7.png)
 
 MIT © Anupa Kuriakose
