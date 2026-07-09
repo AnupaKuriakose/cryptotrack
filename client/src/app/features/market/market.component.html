@@ -50,8 +50,8 @@
 
             <!-- Watchlist star -->
             <ng-container matColumnDef="watchlist">
-                <th mat-header-cell *matHeaderCellDef class="text-right col-watchlist"></th>
-                <td mat-cell *matCellDef="let coin" class="text-right col-watchlist">
+                <th mat-header-cell *matHeaderCellDef class="text-right"></th>
+                <td mat-cell *matCellDef="let coin" class="text-right">
                     <button mat-icon-button (click)="toggleWatchlist($event, coin)"
                         [matTooltip]="watchlistIds().has(coin.id) ? 'Remove from watchlist' : 'Add to watchlist'">
                         <mat-icon [style.color]="watchlistIds().has(coin.id) ? '#FFC107' : '#ccc'">
@@ -63,8 +63,8 @@
 
             <!-- Coin name -->
             <ng-container matColumnDef="name">
-                <th mat-header-cell *matHeaderCellDef class="col-name">Coin</th>
-                <td mat-cell *matCellDef="let coin" class="col-name">
+                <th mat-header-cell *matHeaderCellDef>Coin</th>
+                <td mat-cell *matCellDef="let coin">
                     <div class="coin-cell">
                         <img [src]="coin.image" [alt]="coin.name" width="28" height="28" class="coin-img" />
                         <div>
@@ -77,17 +77,17 @@
 
             <!-- Price — sortable -->
             <ng-container matColumnDef="price">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header="current_price" class="text-right col-price">Price</th>
-                <td mat-cell *matCellDef="let coin" class="text-right mono price-cell col-price">
-                    {{ coin.current_price | currency:'USD':'symbol':'1.2-6' }}
-                </td>
-            </ng-container>
+  <th mat-header-cell *matHeaderCellDef class="text-right">Price</th>
+  <td mat-cell *matCellDef="let coin" class="text-right mono price-cell">
+    {{ coin.current_price | currency:'USD':'symbol':'1.2-6' }}
+  </td>
+</ng-container>
 
             <!-- 24h % — sortable -->
-            <ng-container matColumnDef="change24h">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header="price_change_percentage_24h" class="text-right col-change">
-                    24h %</th>
-                <td mat-cell *matCellDef="let coin" class="text-right col-change">
+           <!-- 24h % -->
+<ng-container matColumnDef="change24h">
+  <th mat-header-cell *matHeaderCellDef class="text-right">24h %</th>
+  <td mat-cell *matCellDef="let coin" class="text-right">
                     <span class="change-pill" [class.up]="coin.price_change_percentage_24h > 0"
                         [class.down]="coin.price_change_percentage_24h < 0">
                         <mat-icon class="arrow-icon">
@@ -98,18 +98,18 @@
                 </td>
             </ng-container>
 
-            <!-- Market Cap — sortable -->
-            <ng-container matColumnDef="marketCap">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header="market_cap" class="text-right col-market-cap">Market Cap</th>
-                <td mat-cell *matCellDef="let coin" class="text-right mono muted col-market-cap">
+            <!-- Market Cap -->
+<ng-container matColumnDef="marketCap">
+  <th mat-header-cell *matHeaderCellDef class="text-right">Market Cap</th>
+  <td mat-cell *matCellDef="let coin" class="text-right mono muted">
                     {{ formatLargeNumber(coin.market_cap) }}
                 </td>
             </ng-container>
 
-            <!-- Volume — sortable -->
-            <ng-container matColumnDef="volume">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header="total_volume" class="text-right col-volume">Volume 24h</th>
-                <td mat-cell *matCellDef="let coin" class="text-right mono muted col-volume">
+           <!-- Volume -->
+<ng-container matColumnDef="volume">
+  <th mat-header-cell *matHeaderCellDef class="text-right">Volume 24h</th>
+  <td mat-cell *matCellDef="let coin" class="text-right mono muted">
                     {{ formatLargeNumber(coin.total_volume) }}
                 </td>
             </ng-container>

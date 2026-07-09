@@ -32,6 +32,9 @@ import {
 } from 'chart.js';
 import { MarketFacade } from '../../store/market/market.facade';
 import { WatchlistFacade } from '../../store/watchlist/watchlist.facade';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { AddHoldingDialogComponent } from '../portfolio/add-holding-dialog.component';
+import { PortfolioFacade } from '../../store/portfolio/portfolio.facade';
 
 // Register Chart.js components
 Chart.register(
@@ -60,6 +63,7 @@ Chart.register(
         MatProgressSpinnerModule,
         MatChipsModule,
         MatTooltipModule,
+        MatDialogModule
         // ← no BaseChartDirective needed
     ],
     templateUrl: './coin-detail.component.html',
@@ -70,6 +74,8 @@ export class CoinDetailComponent implements OnInit, AfterViewInit, OnDestroy {
     private router = inject(Router);
     private facade = inject(MarketFacade);
     private watchlistFacade = inject(WatchlistFacade);
+    private dialog = inject(MatDialog);
+private portfolioFacade = inject(PortfolioFacade);
     watchlistIds = toSignal(this.watchlistFacade.watchlistIds$, { initialValue: new Set<string>() });
 
     // Canvas ref — Chart.js attaches here
@@ -220,4 +226,24 @@ export class CoinDetailComponent implements OnInit, AfterViewInit, OnDestroy {
             });
         }
     }
+    openAddToPortfolio(c: any) {
+  const ref = this.dialog.open(AddHoldingDialogComponent, {
+    data: {
+      mode: 'add',
+      holding: {
+        coin_id: c.id,
+        coin_name: c.name,
+        coin_symbol: c.symbol,
+        coin_image: c.image.large,
+        buy_price: c.market_data.current_price.usd,
+      },
+      coins: [],
+    },
+    width: '420px',
+  });
+
+  ref.afterClosed().subscribe((result) => {
+    if (result) this.portfolioFacade.addHolding(result);
+  });
+}
 }

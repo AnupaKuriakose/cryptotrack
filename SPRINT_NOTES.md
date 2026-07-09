@@ -248,7 +248,24 @@ Zero manual subscription. When NgRx effect completes and updates store → price
 - MatSnackBar with UNDO on remove
 - First real PostgreSQL CRUD from Angular
 
+Server (2 files):
+
+watchlist.controller.js — 3 functions: getAll, addCoin, removeCoin using raw SQL with pg
+watchlist.routes.js — GET / POST / DELETE wired up
+
+Angular (10 files created, 5 updated):
+Layer           What changed   
+Model          WatchlistItem interface with optional enriched price fields
+API Service     WatchlistApiService — 3 HTTP methods
+NgRx Store    Full slice — actions, reducer, effects, selectors,facade
+Feature page  WatchlistComponent — table + empty state
+Market pageStar toggle + watchlistIds signalCoin detailStar button wired to same facadeApp shellWatchlist sidenav link + route added
+
 ### Sprint 4 — Portfolio CRUD + P&L
+What we're building:
+Express CRUD → NgRx portfolio store → Portfolio page
++ Add/Edit holding dialog → Live P&L calculations via computed()
+
 - Express: full CRUD /api/portfolio
 - Add holding dialog — MatDialog + Reactive Form + MatAutocomplete
 - computed() signal for live P&L per holding

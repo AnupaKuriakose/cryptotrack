@@ -54,6 +54,10 @@ import { DOCUMENT } from '@angular/common';
     <mat-icon matListItemIcon>star</mat-icon>
     <span matListItemTitle>Watchlist</span>
   </a>
+  <a mat-list-item routerLink="/portfolio" routerLinkActive="active-link">
+  <mat-icon matListItemIcon>account_balance_wallet</mat-icon>
+  <span matListItemTitle>Portfolio</span>
+</a>
         </mat-nav-list>
 
    

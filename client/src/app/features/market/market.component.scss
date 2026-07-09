@@ -61,45 +61,34 @@
     border-radius: 4px;
 }
 
-/* Error */
-.error-banner {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: #ffebee;
-    color: #c62828;
-    padding: 10px 14px;
-    border-radius: 6px;
-    margin-bottom: 12px;
-    font-size: 13px;
-}
-
-/* Coin count */
-.coin-count {
-    font-size: 12px;
-    color: #888;
-    margin: 0 0 10px;
-}
-
-/* Table */
-.table-card {
-    border: 1px solid #e0e0e0;
-    border-radius: 10px;
-    overflow: hidden;
-    background: #fff;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
-}
-
-.coin-table {
-    width: 100%;
-}
-
 /* Column widths */
-.coin-table {
-    width: 100%;
-    table-layout: fixed;
+.col-rank {
+    width: 56px;
 }
 
+.col-name {
+    width: 200px;
+}
+
+.col-price {
+    width: 150px;
+}
+
+.col-change {
+    width: 120px;
+}
+
+.col-market-cap {
+    width: 150px;
+}
+
+.col-volume {
+    width: 150px;
+}
+
+.text-right {
+    text-align: right !important;
+}
 .col-watchlist {
     width: 56px;
     text-align: center !important;
@@ -288,3 +277,30 @@ th.mat-header-cell.col-volume .mat-sort-header-container {
 .mat-sort-header-container {
     justify-content: flex-end;
 }
+
+/* Fix header alignment to match data cells */
+.mat-mdc-header-cell {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #999;
+  background: #fafafa;
+  padding: 10px 16px !important;
+}
+
+.mat-mdc-cell {
+  padding: 10px 16px !important;
+}
+
+/* Right-align both header AND data cells for these columns */
+.mat-mdc-header-cell.text-right,
+.mat-mdc-cell.text-right {
+  text-align: right !important;
+}
+
+/* Fix the header container alignment */
+.mat-sort-header-container {
+  justify-content: flex-end;
+}
+

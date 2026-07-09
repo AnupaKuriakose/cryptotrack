@@ -21,4 +21,9 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/watchlist/watchlist.component').then((m) => m.WatchlistComponent),
   },
+  {
+  path: 'portfolio',
+  loadComponent: () =>
+    import('./features/portfolio/portfolio.component').then((m) => m.PortfolioComponent),
+},
 ];
