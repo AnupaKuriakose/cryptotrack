@@ -261,6 +261,65 @@ NgRx Store    Full slice — actions, reducer, effects, selectors,facade
 Feature page  WatchlistComponent — table + empty state
 Market pageStar toggle + watchlistIds signalCoin detailStar button wired to same facadeApp shellWatchlist sidenav link + route added
 
+Sprint 3 — Watchlist CRUD
+
+Date completed: Day 3-4
+Time taken: ~2.5 hours
+
+What we built
+
+
+Full watchlist CRUD — add, view, remove coins persisted in Neon PostgreSQL
+Star button on every market table row — yellow when in watchlist, grey when not
+Star button on coin detail page — toggles "Watchlist" / "Watching"
+Watchlist page with live prices enriched from market store
+MatSnackBar notifications on add and remove
+Optimistic UI on remove — row disappears instantly, API call happens in background
+Empty state on watchlist page with "Browse Market" CTA
+selectWatchlistIds selector — Set<string> for O(1) star button lookups
+selectEnrichedWatchlist selector — joins watchlist items with live market prices
+
+
+Key files created
+
+server/
+├── src/controllers/watchlist.controller.js  ← getAll, addCoin, removeCoin
+└── src/routes/watchlist.routes.js           ← GET /, POST /, DELETE /:coinId
+
+client/src/
+├── app/models/watchlist.model.ts                    ← WatchlistItem interface
+├── app/core/services/watchlist-api.service.ts       ← HttpClient calls
+├── app/store/watchlist/watchlist.actions.ts         ← 9 actions in 3 groups
+├── app/store/watchlist/watchlist.reducer.ts         ← optimistic remove
+├── app/store/watchlist/watchlist.effects.ts         ← 5 effects inc snackbar
+├── app/store/watchlist/watchlist.selectors.ts       ← enriched + ids selectors
+├── app/store/watchlist/watchlist.facade.ts          ← clean component API
+└── app/features/watchlist/watchlist.component.ts   ← full page
+
+Key files updated
+
+server/src/routes/watchlist.routes.js        ← was stub, now wired
+client/src/
+├── app/app.config.ts                        ← added watchlistReducer + WatchlistEffects
+├── app/app.routes.ts                        ← added /watchlist lazy route
+├── app/app.ts                               ← added Watchlist sidenav link
+├── app/features/market/market.component.ts  ← star toggle + watchlistIds signal
+└── app/features/coin-detail/coin-detail.component.ts ← star toggle button
+
+SQL used in this sprint
+
+sql-- Get all watchlist items
+SELECT * FROM watchlist ORDER BY added_at DESC;
+
+-- Add coin (ON CONFLICT = no duplicates)
+INSERT INTO watchlist (coin_id, coin_name, coin_symbol, coin_image)
+VALUES ($1, $2, $3, $4)
+ON CONFLICT (coin_id) DO NOTHING
+RETURNING *;
+
+-- Remove coin
+DELETE FROM watchlist WHERE coin_id = $1;
+
 ### Sprint 4 — Portfolio CRUD + P&L
 What we're building:
 Express CRUD → NgRx portfolio store → Portfolio page
