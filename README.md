@@ -3,7 +3,7 @@
 > Full-stack cryptocurrency portfolio and market dashboard  
 > **Angular 18 · NgRx · Signals · Angular Material · Node.js · Express · Neon PostgreSQL · CoinGecko API**
 
-![Angular](https://img.shields.io/badge/Angular-18-red?logo=angular)
+![Angular](https://img.shields.io/badge/Angular-21-red?logo=angular)
 ![NgRx](https://img.shields.io/badge/NgRx-18-purple?logo=redux)
 ![Node.js](https://img.shields.io/badge/Node.js-20-green?logo=nodedotjs)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Neon-blue?logo=postgresql)
@@ -27,17 +27,37 @@
 
 ## What is CryptoTrack?
 
-CryptoTrack is a senior-level Angular 18 portfolio project demonstrating enterprise-grade frontend patterns — NgRx facade, Angular Signals, OnPush change detection, lazy-loaded routes, reactive forms, and a Node.js caching proxy backed by Neon PostgreSQL.
+CryptoTrack is a full-stack cryptocurrency dashboard that lets users browse live market data, manage a personal watchlist, track a mock investment portfolio with real-time P&L calculations, and set price alerts — all powered by the CoinGecko free API with zero running cost.
 
-**Key features:**
-- 📊 Live market data for top 50 coins — auto-refreshes every 60 seconds
-- 📈 Price charts with 1D / 7D / 30D / 90D range toggle powered by Chart.js
-- ⭐ Personal watchlist — add/remove coins with live price enrichment
-- 💼 Portfolio tracker — track holdings with live P&L calculations
-- 🔔 Price alerts — get notified when coins hit your target *(Sprint 5)*
-- 🌙 Dark / light theme toggle
+Built as a senior-level Angular 21 portfolio project, it applies the same enterprise patterns used in large-scale fintech applications — NgRx with facade pattern, Angular Signals throughout (toSignal(), computed(), effect()), OnPush change detection, lazy-loaded routes, and a Node.js Express backend that acts as a caching proxy to protect free API rate limits. The backend is backed by Neon serverless PostgreSQL for all user CRUD operations — watchlist, portfolio holdings, and price alerts.
 
-**Zero running cost** — CoinGecko free public API (no key needed) + Neon free tier PostgreSQL.
+This project is directly inspired by real-world ETF order management and trading platform work (BlackRock LEO), reframed as an open-source portfolio showcase. Every architectural decision — from the NgRx facade to the cross-feature selectors to the 60-second cache TTL — has a real reason behind it that holds up in a technical interview.
+
+## What the app does:
+
+
+📊 Live market overview — top 50 coins by market cap, sortable columns, real-time search, auto-refresh every 60s
+📈 Coin detail pages — Chart.js price history with 1D / 7D / 30D / 90D range toggle driven by Angular Signals
+⭐ Watchlist — add/remove coins from any page, live prices enriched from NgRx market store without extra API calls
+💼 Portfolio tracker — add holdings with buy price and date, live P&L per holding and overall summary
+🔔 Price alerts — set above/below target alerts, signal-driven checker fires snackbar notification (Sprint 5)
+🌙 Dark / light theme toggle across the full Angular Material UI
+
+
+## What it demonstrates technically:
+
+
+NgRx facade pattern — components never import from the store directly
+Angular Signals — toSignal(), computed(), effect() replacing manual RxJS subscriptions throughout
+Cross-feature NgRx selectors — portfolio P&L and watchlist prices enriched from market store, zero extra API calls
+Node.js caching proxy — 60s TTL protects CoinGecko 30 req/min free tier across all polling components
+Neon serverless PostgreSQL — cloud database, schema migrations, parameterised queries, SSL connection pooling
+Reactive Forms with MatAutocomplete — coin search dialog with live filtering and buy price pre-fill
+Optimistic UI — watchlist remove and portfolio delete update the UI instantly, API confirms in background
+Chart.js direct integration — ViewChild canvas, chart.update() on signal change, chart.destroy() on teardown
+
+
+Zero running cost — CoinGecko free public API (no key needed) + Neon free tier PostgreSQL.
 
 ---
 
@@ -46,7 +66,7 @@ CryptoTrack is a senior-level Angular 18 portfolio project demonstrating enterpr
 ### Frontend
 | Layer | Technology |
 |-------|------------|
-| Framework | Angular 18 — standalone components, no NgModules |
+| Framework | Angular 21 — standalone components, no NgModules |
 | State management | NgRx 18 — Store, Effects, Selectors, Facade pattern |
 | Reactive UI | Angular Signals · `toSignal()` · `computed()` · `effect()` |
 | UI library | Angular Material 18 |
@@ -322,7 +342,7 @@ CREATE TABLE alerts (
 
 ---
 
-## Key Interview Talking Points
+## Key Talking Points
 
 | Topic | Talking Point |
 |-------|--------------|
