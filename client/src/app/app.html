@@ -1,1 +1,44 @@
+<mat-toolbar color="primary" class="toolbar">
+    <div class="toolbar-left">
+        <span class="logo">📈 CryptoTrack</span>
+    </div>
+    <div class="toolbar-right">
+        <button mat-icon-button (click)="toggleTheme()"
+            [matTooltip]="isDark() ? 'Switch to light mode' : 'Switch to dark mode'">
+            <mat-icon>{{ isDark() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+        </button>
+    </div>
+</mat-toolbar>
 
+<mat-sidenav-container class="sidenav-container">
+    <mat-sidenav mode="side" opened class="sidenav">
+
+        <mat-nav-list>
+
+            <mat-list-item routerLink="/market" routerLinkActive="active-link">
+                <mat-icon matListItemIcon>bar_chart</mat-icon>
+                <span matListItemTitle>Market</span></mat-list-item>
+
+            <a mat-list-item routerLink="/watchlist" routerLinkActive="active-link">
+                <mat-icon matListItemIcon>star</mat-icon>
+                <span matListItemTitle>Watchlist</span>
+            </a>
+            <a mat-list-item routerLink="/portfolio" routerLinkActive="active-link">
+                <mat-icon matListItemIcon>account_balance_wallet</mat-icon>
+                <span matListItemTitle>Portfolio</span>
+            </a>
+            <a mat-list-item routerLink="/alerts" routerLinkActive="active-link">
+                <mat-icon matListItemIcon>notifications</mat-icon>
+                <span matListItemTitle>Alerts</span>
+            </a>
+        </mat-nav-list>
+
+
+
+
+    </mat-sidenav>
+
+    <mat-sidenav-content class="content">
+        <router-outlet />
+    </mat-sidenav-content>
+</mat-sidenav-container>

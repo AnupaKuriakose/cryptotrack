@@ -1,0 +1,130 @@
+   <div class="page">
+
+      <!-- Header -->
+      <div class="page-header">
+        <div>
+          <h2>Price Alerts</h2>
+          <p class="subtitle">
+            {{ activeCount() }} active ·
+            {{ alerts().length }} total
+          </p>
+        </div>
+        <button mat-flat-button color="primary" (click)="openCreateDialog()">
+          <mat-icon>add_alert</mat-icon> New Alert
+        </button>
+      </div>
+
+      @if (loading()) {
+        <mat-progress-bar mode="indeterminate" class="progress" />
+      }
+
+      <!-- Empty state -->
+      @if (!loading() && alerts().length === 0) {
+        <div class="empty-state">
+          <mat-icon>notifications_none</mat-icon>
+          <p>No alerts set</p>
+          <span>Create an alert to get notified when a coin hits your target price</span>
+          <button mat-stroked-button (click)="openCreateDialog()">
+            <mat-icon>add_alert</mat-icon> Create Alert
+          </button>
+        </div>
+      }
+
+      <!-- Alerts table -->
+      @if (alerts().length > 0) {
+        <div class="table-card">
+          <table mat-table [dataSource]="alerts()" class="alerts-table">
+
+            <!-- Coin -->
+            <ng-container matColumnDef="coin">
+              <th mat-header-cell *matHeaderCellDef>Coin</th>
+              <td mat-cell *matCellDef="let alert">
+                <div class="coin-cell">
+                  <div class="coin-initial" [style.background]="getColor(alert.coin_symbol)">
+                    {{ alert.coin_symbol[0] | uppercase }}
+                  </div>
+                  <div>
+                    <div class="coin-name">{{ alert.coin_name }}</div>
+                    <div class="coin-sym">{{ alert.coin_symbol | uppercase }}</div>
+                  </div>
+                </div>
+              </td>
+            </ng-container>
+
+            <!-- Condition -->
+            <ng-container matColumnDef="condition">
+              <th mat-header-cell *matHeaderCellDef>Condition</th>
+              <td mat-cell *matCellDef="let alert">
+                <span
+                  class="condition-badge"
+                  [class.above]="alert.condition === 'above'"
+                  [class.below]="alert.condition === 'below'"
+                >
+                  {{ alert.condition === 'above' ? '▲ Above' : '▼ Below' }}
+                </span>
+              </td>
+            </ng-container>
+
+            <!-- Target price -->
+            <ng-container matColumnDef="target">
+              <th mat-header-cell *matHeaderCellDef class="text-right">Target</th>
+              <td mat-cell *matCellDef="let alert" class="text-right mono">
+                ${{ alert.target_price | number: '1.2-2' : 'en-US' }}
+              </td>
+            </ng-container>
+
+            <!-- Current price -->
+            <ng-container matColumnDef="current">
+              <th mat-header-cell *matHeaderCellDef class="text-right">Current</th>
+              <td mat-cell *matCellDef="let alert" class="text-right mono muted">
+                {{ alert.current_price ? '$' + (alert.current_price | number: '1.2-2') : '—' }}
+              </td>
+            </ng-container>
+
+            <!-- Status -->
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef>Status</th>
+              <td mat-cell *matCellDef="let alert">
+                @if (alert.status === 'active') {
+                  <span class="status-chip active">
+                    <span class="pulse"></span> Active
+                  </span>
+                } @else {
+                  <span class="status-chip triggered">
+                    🔔 Triggered
+                  </span>
+                }
+              </td>
+            </ng-container>
+
+            <!-- Created -->
+            <ng-container matColumnDef="created">
+              <th mat-header-cell *matHeaderCellDef class="text-right">Created</th>
+              <td mat-cell *matCellDef="let alert" class="text-right muted">
+                {{ alert.created_at | date:'mediumDate' }}
+              </td>
+            </ng-container>
+
+            <!-- Delete -->
+            <ng-container matColumnDef="delete">
+              <th mat-header-cell *matHeaderCellDef></th>
+              <td mat-cell *matCellDef="let alert">
+                <button
+                  mat-icon-button
+                  color="warn"
+                  matTooltip="Delete alert"
+                  (click)="delete(alert)"
+                >
+                  <mat-icon>delete_outline</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="alert-row"></tr>
+
+          </table>
+        </div>
+      }
+
+    </div>

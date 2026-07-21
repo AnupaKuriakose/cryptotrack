@@ -105,6 +105,10 @@ Create alert dialog — coin, above/below, target price
 Signal effect() checks alerts vs live prices every refresh
 MatSnackBar fires when alert triggers
 
+Express CRUD → NgRx alerts store → Alerts page
++ signal-driven effect() checks alerts vs live prices every 60s
++ MatSnackBar fires when alert triggers
+
 Sprint 6 — Dashboard + Polish
 --------------------------------
 Dashboard home — summary cards, top movers, global stats

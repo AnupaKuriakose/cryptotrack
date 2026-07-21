@@ -20,7 +20,7 @@
 | Sprint 2 | Coin detail page · Chart.js price chart · 1D/7D/30D/90D toggle | ✅ Done |
 | Sprint 3 | Watchlist CRUD · star buttons · live price enrichment | ✅ Done |
 | Sprint 4 | Portfolio CRUD · live P&L calculations · add/edit dialog | ✅ Done |
-| Sprint 5 | Price alerts · signal-driven alert checker | ⏳ Pending |
+| Sprint 5 | Price alerts · signal-driven alert checker | 	✅ Done |
 | Sprint 6 | Dashboard · global stats · deploy | ⏳ Pending |
 
 ---
@@ -88,9 +88,8 @@ Zero running cost — CoinGecko free public API (no key needed) + Neon free tier
 
 ## Project Structure
 
-```
 cryptotrack/                         ← monorepo root
-├── client/                          ← Angular 18 SPA
+├── client/                          ← Angular 21 SPA
 │   └── src/
 │       ├── app/
 │       │   ├── core/
@@ -126,8 +125,6 @@ cryptotrack/                         ← monorepo root
 ├── SPRINT_NOTES.md                  ← Dev journal — decisions + interview prep
 ├── STORIES.md                       ← Task tracker
 └── README.md
-```
-
 ---
 
 ## Getting Started

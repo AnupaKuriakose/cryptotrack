@@ -1,0 +1,15 @@
+  .form { display: flex; flex-direction: column; gap: 8px; min-width: 340px; padding-top: 8px; }
+    .full-width { width: 100%; }
+    .coin-option { display: flex; align-items: center; gap: 8px; }
+    .sym { color: #999; font-size: 11px; }
+    .selected-coin {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 12px; background: #f5f5f5;
+      border-radius: 6px; font-size: 13px;
+    }
+    .current-price { color: #3F51B5; font-size: 12px; margin-left: auto; }
+    .condition-label { font-size: 12px; color: #666; margin-bottom: 4px; }
+    .radio-group { display: flex; gap: 24px; margin-bottom: 8px; }
+    .radio-label { font-size: 13px; font-weight: 500; }
+    .up { color: #16C784; }
+    .down { color: #EA3943; }
